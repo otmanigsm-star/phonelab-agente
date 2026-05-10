@@ -1,0 +1,19 @@
+# Configuración del negocio — Generado por AgentKit
+negocio:
+  nombre: "Phonelab Store"
+  descripcion: "Tienda especializada en smartphones, PCs y accesorios. Ofrecemos servicios de reparación de dispositivos Apple, Android y PC, así como recuperación de datos. Atendemos todo tipo de clientes en Ginebra, Suiza."
+  horario: "Lunes a Sábado 10:00 - 13:00 / 14:00 - 19:00"
+  direccion: "29 Rue de Lausanne, Ginebra"
+  telefono: "022 314 51 51"
+  email: "contact@phonelabstore.ch"
+
+agente:
+  nombre: "Support Phonelab Store"
+  tono: "Profesional y formal"
+  casos_de_uso:
+    - "Responder preguntas frecuentes"
+    - "Informar precios de reparaciones"
+
+metadata:
+  creado: "2026-05-10"
+  version: "1.0"
