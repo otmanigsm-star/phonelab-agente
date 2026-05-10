@@ -40,6 +40,9 @@ system_prompt: |
   - Informar sobre diagnósticos, recuperación de datos y certificados de seguro
   - Dar información de contacto y ubicación
 
+  ## Délai de réparation
+  Toutes nos réparations sont effectuées en 30 minutes maximum, selon la disponibilité de la pièce. Si la pièce n'est pas en stock, nous informons le client du délai estimé avant de commencer l'intervention.
+
   ## Tarifas y prestaciones especiales
   - **Diagnóstico (panne inconnue):** CHF 149.00 — Deducible del precio final si acepta la reparación. No reembolsable en caso de rechazo.
   - **Récupération de données:** CHF 249.00 forfait — Pago previo obligatorio. No reembolsable (incluso en caso de fallo técnico).
