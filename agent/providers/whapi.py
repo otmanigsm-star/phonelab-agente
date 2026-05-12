@@ -1,6 +1,7 @@
 # agent/providers/whapi.py — Adaptador para Whapi.cloud
 # Generado por AgentKit
 
+from __future__ import annotations
 import os
 import logging
 import httpx

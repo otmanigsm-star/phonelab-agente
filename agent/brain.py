@@ -1,6 +1,7 @@
 # agent/brain.py — Cerebro del agente: conexión con Claude API
 # Generado por AgentKit
 
+from __future__ import annotations
 import os
 import yaml
 import logging

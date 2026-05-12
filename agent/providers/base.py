@@ -1,8 +1,10 @@
 # agent/providers/base.py — Clase base para proveedores de WhatsApp
 # Generado por AgentKit
 
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import List, Optional, Union
 from fastapi import Request
 
 
@@ -19,7 +21,7 @@ class ProveedorWhatsApp(ABC):
     """Interfaz que cada proveedor de WhatsApp debe implementar."""
 
     @abstractmethod
-    async def parsear_webhook(self, request: Request) -> list[MensajeEntrante]:
+    async def parsear_webhook(self, request: Request) -> List[MensajeEntrante]:
         """Extrae y normaliza mensajes del payload del webhook."""
         ...
 
@@ -28,6 +30,6 @@ class ProveedorWhatsApp(ABC):
         """Envía un mensaje de texto. Retorna True si fue exitoso."""
         ...
 
-    async def validar_webhook(self, request: Request) -> dict | int | None:
+    async def validar_webhook(self, request: Request) -> Optional[Union[dict, int]]:
         """Verificación GET del webhook (solo Meta la requiere). Retorna respuesta o None."""
         return None

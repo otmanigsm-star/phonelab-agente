@@ -1,6 +1,7 @@
 # agent/memory.py — Memoria de conversaciones con SQLite
 # Generado por AgentKit
 
+from __future__ import annotations
 import os
 from datetime import datetime
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
