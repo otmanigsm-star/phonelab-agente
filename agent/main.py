@@ -4,12 +4,12 @@
 import os
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Header
 from fastapi.responses import PlainTextResponse
 from dotenv import load_dotenv
 
 from agent.brain import generar_respuesta
-from agent.memory import inicializar_db, guardar_mensaje, obtener_historial
+from agent.memory import inicializar_db, guardar_mensaje, obtener_historial, limpiar_historial
 from agent.providers import obtener_proveedor
 
 load_dotenv()
@@ -85,3 +85,20 @@ async def webhook_handler(request: Request):
     except Exception as e:
         logger.error(f"Error en webhook: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/reset/{telefono}")
+async def reset_historial(telefono: str, x_reset_token: str = Header(default=None)):
+    """Limpia el historial de conversación de un número de teléfono.
+
+    Protegido por la variable de entorno RESET_TOKEN. Si no está definida,
+    el endpoint devuelve 503 (deshabilitado) por seguridad.
+    """
+    token_esperado = os.getenv("RESET_TOKEN")
+    if not token_esperado:
+        raise HTTPException(status_code=503, detail="RESET_TOKEN no configurado")
+    if x_reset_token != token_esperado:
+        raise HTTPException(status_code=401, detail="Token inválido")
+    await limpiar_historial(telefono)
+    logger.info(f"Historial borrado para {telefono}")
+    return {"status": "ok", "telefono": telefono, "mensaje": "Historial borrado"}
