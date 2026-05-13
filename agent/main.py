@@ -1,8 +1,9 @@
 # agent/main.py — Servidor FastAPI + Webhook de WhatsApp
-# Generado por AgentKit
 
 import os
+import time
 import logging
+from collections import defaultdict
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import PlainTextResponse
@@ -21,34 +22,47 @@ logger = logging.getLogger("agentkit")
 
 proveedor = obtener_proveedor()
 PORT = int(os.getenv("PORT", 8000))
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET", "")
+MAX_MESSAGE_LENGTH = 1000
+
+# Rate limiting : max 10 messages par numéro par minute
+_rate_buckets: dict[str, list[float]] = defaultdict(list)
+RATE_LIMIT = 10
+RATE_WINDOW = 60
+
+
+def _is_rate_limited(telefono: str) -> bool:
+    now = time.time()
+    _rate_buckets[telefono] = [t for t in _rate_buckets[telefono] if now - t < RATE_WINDOW]
+    if len(_rate_buckets[telefono]) >= RATE_LIMIT:
+        return True
+    _rate_buckets[telefono].append(now)
+    return False
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Inicializa la base de datos al arrancar el servidor."""
     await inicializar_db()
-    logger.info("Base de datos inicializada")
-    logger.info(f"Servidor AgentKit corriendo en puerto {PORT}")
-    logger.info(f"Proveedor de WhatsApp: {proveedor.__class__.__name__}")
+    logger.info(f"Serveur démarré sur le port {PORT} — Proveedor: {proveedor.__class__.__name__}")
     yield
 
 
 app = FastAPI(
     title="AgentKit — Support Phonelab Store",
     version="1.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None,
 )
 
 
 @app.get("/")
 async def health_check():
-    """Endpoint de salud para Railway/monitoreo."""
-    return {"status": "ok", "service": "agentkit", "agente": "Support Phonelab Store"}
+    return {"status": "ok"}
 
 
 @app.get("/webhook")
 async def webhook_verificacion(request: Request):
-    """Verificación GET del webhook (requerido por Meta Cloud API, no-op para otros)."""
     resultado = await proveedor.validar_webhook(request)
     if resultado is not None:
         return PlainTextResponse(str(resultado))
@@ -57,10 +71,12 @@ async def webhook_verificacion(request: Request):
 
 @app.post("/webhook")
 async def webhook_handler(request: Request):
-    """
-    Recibe mensajes de WhatsApp via Whapi.cloud.
-    Procesa el mensaje, genera respuesta con Claude y la envía de vuelta.
-    """
+    # Vérification du secret webhook si configuré
+    if WEBHOOK_SECRET:
+        token = request.headers.get("X-Webhook-Secret", "")
+        if token != WEBHOOK_SECRET:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+
     try:
         mensajes = await proveedor.parsear_webhook(request)
 
@@ -68,20 +84,28 @@ async def webhook_handler(request: Request):
             if msg.es_propio or not msg.texto:
                 continue
 
-            logger.info(f"Mensaje de {msg.telefono}: {msg.texto}")
+            # Rate limiting par numéro
+            if _is_rate_limited(msg.telefono):
+                logger.warning(f"Rate limit dépassé pour {msg.telefono[-4:]}")
+                continue
+
+            # Limite taille du message
+            texto = msg.texto[:MAX_MESSAGE_LENGTH]
+
+            logger.info(f"Message reçu de ...{msg.telefono[-4:]}")
 
             historial = await obtener_historial(msg.telefono)
-            respuesta = await generar_respuesta(msg.texto, historial)
+            respuesta = await generar_respuesta(texto, historial)
 
-            await guardar_mensaje(msg.telefono, "user", msg.texto)
+            await guardar_mensaje(msg.telefono, "user", texto)
             await guardar_mensaje(msg.telefono, "assistant", respuesta)
 
             await proveedor.enviar_mensaje(msg.telefono, respuesta)
 
-            logger.info(f"Respuesta a {msg.telefono}: {respuesta}")
-
         return {"status": "ok"}
 
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error en webhook: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Erreur webhook: {type(e).__name__}")
+        raise HTTPException(status_code=500, detail="Erreur interne")
