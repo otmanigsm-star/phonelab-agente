@@ -1,9 +1,12 @@
 # agent/tools.py — Herramientas del agente Phonelab Store
 # Generado por AgentKit
+# Integración de búsqueda de vuelos (Kiwi + Skyscanner)
 
 import os
 import yaml
 import logging
+import httpx
+from datetime import datetime
 
 logger = logging.getLogger("agentkit")
 
@@ -53,3 +56,192 @@ def buscar_en_knowledge(consulta: str) -> str:
     if resultados:
         return "\n---\n".join(resultados)
     return "No encontré información específica sobre eso en mis archivos."
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# APIs DE BÚSQUEDA DE VUELOS — Kiwi.com + Skyscanner
+# ════════════════════════════════════════════════════════════════════════════
+
+def buscar_vuelos_kiwi(origen: str, destino: str, fecha_salida: str, fecha_retorno: str = None) -> str:
+    """
+    Busca vuelos usando Kiwi.com API.
+
+    Args:
+        origen: Código IATA (ej: ALC, MAD)
+        destino: Código IATA (ej: ORN, CDG)
+        fecha_salida: Formato YYYY-MM-DD
+        fecha_retorno: Opcional, formato YYYY-MM-DD
+
+    Returns:
+        String con los vuelos encontrados formateado para el usuario
+    """
+    api_key = os.getenv("KIWI_API_KEY", "")
+    if not api_key:
+        logger.warning("KIWI_API_KEY no configurada")
+        return "Lo siento, la búsqueda de vuelos no está disponible en este momento (API no configurada)."
+
+    try:
+        params = {
+            "fly_from": origen.upper(),
+            "fly_to": destino.upper(),
+            "date_from": fecha_salida,
+            "date_to": fecha_salida,
+            "apikey": api_key,
+            "limit": 5,
+            "sort": "price",
+            "asc": 1,
+        }
+
+        if fecha_retorno:
+            params["return_from"] = fecha_retorno
+            params["return_to"] = fecha_retorno
+
+        response = httpx.get(
+            "https://tequila-api.kiwi.com/v2/search",
+            params=params,
+            timeout=10
+        )
+
+        if response.status_code != 200:
+            logger.error(f"Error Kiwi API: {response.status_code}")
+            return f"Error al buscar vuelos: código {response.status_code}"
+
+        data = response.json()
+        vuelos = data.get("data", [])
+
+        if not vuelos:
+            return f"No encontré vuelos de {origen} a {destino} para {fecha_salida}"
+
+        resultado = f"🛫 **Vuelos de {origen} a {destino}** (ordenados por precio):\n\n"
+        for i, vuelo in enumerate(vuelos, 1):
+            precio = vuelo.get("price", "N/A")
+            aerolínea = vuelo.get("airlines", ["Unknown"])[0]
+            duracion = vuelo.get("duration", {})
+            horas = duracion.get("hours", 0)
+            minutos = duracion.get("minutes", 0)
+
+            resultado += f"{i}. **${precio}** - {aerolínea}\n"
+            resultado += f"   Duración: {horas}h {minutos}m\n"
+
+        return resultado
+
+    except Exception as e:
+        logger.error(f"Error en búsqueda Kiwi: {e}")
+        return f"Error al buscar vuelos: {str(e)}"
+
+
+def buscar_vuelos_skyscanner(origen: str, destino: str, fecha_salida: str) -> str:
+    """
+    Busca vuelos usando Skyscanner API (via RapidAPI).
+
+    Args:
+        origen: Código IATA (ej: ALC)
+        destino: Código IATA (ej: ORN)
+        fecha_salida: Formato YYYY-MM-DD
+
+    Returns:
+        String con los vuelos encontrados formateado para el usuario
+    """
+    api_key = os.getenv("SKYSCANNER_API_KEY", "")
+    if not api_key:
+        logger.warning("SKYSCANNER_API_KEY no configurada")
+        return "La búsqueda con Skyscanner no está disponible (API no configurada)."
+
+    try:
+        headers = {
+            "X-RapidAPI-Key": api_key,
+            "X-RapidAPI-Host": "skyscanner-api.p.rapidapi.com"
+        }
+
+        params = {
+            "adults": "1",
+            "departure_date": fecha_salida,
+            "origin": origen.upper(),
+            "destination": destino.upper(),
+            "currency": "USD",
+        }
+
+        response = httpx.get(
+            "https://skyscanner-api.p.rapidapi.com/v1/flights/search",
+            headers=headers,
+            params=params,
+            timeout=10
+        )
+
+        if response.status_code != 200:
+            logger.error(f"Error Skyscanner API: {response.status_code}")
+            return f"Error en Skyscanner: código {response.status_code}"
+
+        data = response.json()
+        itinerarios = data.get("itineraries", [])
+
+        if not itinerarios:
+            return f"Skyscanner: No encontré vuelos de {origen} a {destino} para {fecha_salida}"
+
+        resultado = f"✈️ **Resultados Skyscanner** ({origen} → {destino}, {fecha_salida}):\n\n"
+        for i, item in enumerate(itinerarios[:3], 1):
+            precio = item.get("price", {}).get("total", "N/A")
+            resultado += f"{i}. Precio: **{precio}** USD\n"
+
+        return resultado
+
+    except Exception as e:
+        logger.error(f"Error en búsqueda Skyscanner: {e}")
+        return f"Error Skyscanner: {str(e)}"
+
+
+def buscar_vuelos(origen: str, destino: str, fecha: str) -> str:
+    """
+    Busca vuelos usando ambas APIs (Kiwi como principal, Skyscanner como alternativa).
+
+    Args:
+        origen: Ciudad o código IATA (ej: "Alicante" o "ALC")
+        destino: Ciudad o código IATA (ej: "Oran" o "ORN")
+        fecha: Fecha en formato YYYY-MM-DD o descripción (ej: "mañana", "20 de mayo")
+
+    Returns:
+        Resultado combinado de ambas APIs
+    """
+    # Mapeo simple de ciudades a códigos IATA
+    ciudades = {
+        "alicante": "ALC", "alicante ": "ALC",
+        "oran": "ORN", "oran ": "ORN",
+        "madrid": "MAD", "barcelona": "BCN", "sevilla": "SVQ",
+        "paris": "CDG", "london": "LHR", "berlin": "TXL",
+    }
+
+    origen_iata = ciudades.get(origen.lower().strip(), origen.upper())
+    destino_iata = ciudades.get(destino.lower().strip(), destino.upper())
+
+    # Procesar fecha (si es "20 de mayo" → convertir a 2026-05-20)
+    try:
+        if len(fecha) == 10 and fecha[4] == "-":
+            fecha_str = fecha
+        else:
+            # Intenta parsear "20 de mayo" → 2026-05-20
+            meses = {
+                "enero": 1, "febrero": 2, "marzo": 3, "abril": 4,
+                "mayo": 5, "junio": 6, "julio": 7, "agosto": 8,
+                "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
+            }
+
+            # Busca patrón "DD de NOMBREMES"
+            partes = fecha.lower().split()
+            if len(partes) >= 3 and partes[1] == "de":
+                dia = int(partes[0])
+                mes_nombre = partes[2].strip()
+                mes = meses.get(mes_nombre, None)
+                if mes:
+                    fecha_str = f"2026-{mes:02d}-{dia:02d}"
+                else:
+                    fecha_str = datetime.now().strftime("%Y-%m-%d")
+            else:
+                fecha_str = datetime.now().strftime("%Y-%m-%d")
+    except:
+        fecha_str = datetime.now().strftime("%Y-%m-%d")
+
+    # Buscar con ambas APIs
+    resultado_kiwi = buscar_vuelos_kiwi(origen_iata, destino_iata, fecha_str)
+    resultado_sky = buscar_vuelos_skyscanner(origen_iata, destino_iata, fecha_str)
+
+    return f"{resultado_kiwi}\n\n{resultado_sky}"
