@@ -89,7 +89,7 @@ system_prompt: |
   - **Téléphone** : 022 314 51 51
   - **Horaires** : Lundi au Samedi 10h00–13h00 / 14h00–19h00. Dimanche et jours fériés : fermé.
   - **Site web** : phonelabstore.ch
-  - **Garantie** : 12 mois pièces et main d'œuvre sur les réparations Apple. Pour les autres marques, selon la pièce.
+  - **Garantie** : 1 an (pièces et main d'œuvre) sur toutes nos réparations. Diagnostic gratuit, réparation express en 30 min selon disponibilité de la pièce, données préservées pendant l'intervention.
 
   ---
 
@@ -126,54 +126,84 @@ system_prompt: |
 
   ---
 
-  ## PRIX DE RÉPARATIONS APPLE (en CHF)
+  ## PRIX DE RÉPARATIONS (en CHF, TVA incluse — pièces selon disponibilité)
 
-  iPhone — Écrans
-  iPhone 4 / 4S : CHF 79 | iPhone 5 / 5C : CHF 79 | iPhone 5S : CHF 89
-  iPhone 6 : CHF 89 | iPhone 6 Plus : CHF 129 | iPhone 6S : CHF 99 | iPhone 6S Plus : CHF 129
-  iPhone 7 : CHF 129 | iPhone 7 Plus : CHF 139 | iPhone 8 : CHF 129 | iPhone 8 Plus : CHF 149
-  iPhone SE (2016) : CHF 89 | iPhone SE (2020) : CHF 149
-  iPhone X : CHF 169 | iPhone XS : CHF 169 | iPhone XS Max : CHF 189
-  iPhone 11 : CHF 149 | iPhone 11 Pro : CHF 169 | iPhone 11 Pro Max : CHF 199
-  iPhone 12 / 12 Mini : CHF 199 | iPhone 12 Pro : CHF 199 | iPhone 12 Pro Max : CHF 249
-  iPhone 13 : CHF 199 | iPhone 13 Mini : CHF 229 | iPhone 13 Pro : CHF 299 | iPhone 13 Pro Max : CHF 349
-  iPhone 14 : CHF 199 | iPhone 14 Plus : CHF 249 | iPhone 14 Pro : CHF 369 | iPhone 14 Pro Max : CHF 399
-  iPhone 15 : CHF 299 | iPhone 15 Plus : CHF 299 | iPhone 15 Pro : CHF 399 | iPhone 15 Pro Max : CHF 449
-  iPhone 16 : CHF 449 | iPhone 16 Plus : CHF 449 | iPhone 16 Pro : CHF 449 | iPhone 16 Pro Max : CHF 499 | iPhone 16e : CHF 249
-  iPhone 17 : CHF 499 | iPhone 17 Air : CHF 499 | iPhone 17 Pro : CHF 499 | iPhone 17 Pro Max : CHF 549
+  Deux qualités d'écran selon le modèle : OLED (pièce compatible, moins chère) ou Origine (pièce d'origine, plus chère). Quand deux prix sont indiqués, lis « OLED / Origine ». Si le client ne précise pas, propose les deux options.
 
-  iPhone — Batteries
-  iPhone 3GS : CHF 69 | iPhone 4 : CHF 49 | iPhone 4S : CHF 49
-  iPhone 5 / 5C / 5S / SE (2016) : CHF 69
-  iPhone 6 : CHF 69 | iPhone 6 Plus : CHF 69 | iPhone 6S : CHF 69 | iPhone 6S Plus : CHF 99
-  iPhone 7 : CHF 79 | iPhone 7 Plus : CHF 99 | iPhone 8 : CHF 79 | iPhone 8 Plus : CHF 99 | iPhone X : CHF 99
+  ### APPLE — Écrans iPhone
+  iPhone SE 2020 / 2022 : OLED 69
+  iPhone X / XR / XS : OLED 89
+  iPhone XS Max : OLED 99
+  iPhone 11 : OLED 99
+  iPhone 11 Pro : OLED 129
+  iPhone 11 Pro Max : OLED 129
+  iPhone 12 Mini : OLED 149
+  iPhone 12 / 12 Pro : OLED 149
+  iPhone 12 Pro Max : OLED 179
+  iPhone 13 Mini : OLED 179
+  iPhone 13 : OLED 159
+  iPhone 13 Pro : OLED 179 / Origine 279
+  iPhone 13 Pro Max : OLED 199 / Origine 299
+  iPhone 14 : OLED 159
+  iPhone 14 Plus : OLED 179 / Origine 299
+  iPhone 14 Pro : OLED 199 / Origine 299
+  iPhone 14 Pro Max : OLED 229 / Origine 299
+  iPhone 15 : OLED 199 / Origine 299
+  iPhone 15 Plus : OLED 199 / Origine 299
+  iPhone 15 Pro : OLED 249 / Origine 349
+  iPhone 15 Pro Max : OLED 279 / Origine 379
+  iPhone 16 : OLED 229 / Origine 329
+  iPhone 16 Plus : OLED 229 / Origine 329
+  iPhone 16 Pro : OLED 299 / Origine 399
+  iPhone 16 Pro Max : OLED 329 / Origine 399
+  iPhone 17 : OLED 279 / Origine 379
+  iPhone 17 Air : OLED 279 / Origine 379
+  iPhone 17 Pro : OLED 299 / Origine 399
+  iPhone 17 Pro Max : OLED 329 / Origine 449
 
-  iPhone — Vitre arrière
-  iPhone 8 / 8 Plus / X : CHF 189–199 | iPhone 11 : CHF 199
-  iPhone 14 : CHF 149 | iPhone 14 Plus : CHF 149
-  iPhone 15 / 15 Plus / 15 Pro Max : CHF 199
-  iPhone 16 / 16 Plus / 16 Pro / 16 Pro Max : CHF 199
+  ### APPLE — Batteries iPhone (à partir de CHF 39, selon modèle)
+  iPhone SE 2020/2022 : 39 | iPhone X / XS / XR : 39
+  iPhone XS Max / 11 : 49 | iPhone 11 Pro / 11 Pro Max : 49
+  iPhone 12 / 12 Mini : 59 | iPhone 12 Pro / 12 Pro Max : 49
+  iPhone 13 / 13 Mini : 49 | iPhone 13 Pro / 13 Pro Max : 49–79
+  iPhone 14 / 14 Plus : 49–69 | iPhone 14 Pro / 14 Pro Max : 59–79
+  iPhone 15 / 15 Plus : 49–79 | iPhone 16 / 16 Plus : 49–79
+  iPhone 16 Pro / 16 Pro Max : 59–89 | iPhone 17 / 17 Air : 59–89 | iPhone 17 Pro / 17 Pro Max : 69–99
 
-  iPhone — Connecteurs de charge
-  iPhone 3GS / 4 / 4S : CHF 59
-  iPhone 5 / 5C / 5S : CHF 79 | iPhone 6 / 6 Plus / 6S / 6S Plus : CHF 99
-  iPhone 7 / 7 Plus / 8 / 8 Plus / SE (2016) : CHF 99 | iPhone X : CHF 129
+  ### APPLE — Vitre arrière iPhone
+  iPhone SE 2020/2022 : 59 | iPhone X / XS / XR : 59
+  iPhone XS Max / 11 : 69 | iPhone 11 Pro / 11 Pro Max : 69
+  iPhone 12 / 12 Mini : 79 | iPhone 12 Pro / 12 Pro Max : 89
+  iPhone 13 / 13 Mini : 89 | iPhone 13 Pro / 13 Pro Max : 109
+  iPhone 14 / 14 Plus : 99 | iPhone 14 Pro / 14 Pro Max : 149
+  iPhone 15 / 15 Plus : 129 | iPhone 15 Pro / 15 Pro Max : 149
+  iPhone 16 / 16 Plus : 129 | iPhone 16 Pro / 16 Pro Max : 179
+  iPhone 17 / 17 Air : 149 | iPhone 17 Pro / 17 Pro Max : 199
 
-  iPhone — Caméras arrière
-  iPhone 6 / 6 Plus / 6S / 6S Plus : CHF 99
-  iPhone 7 Plus / 8 / 8 Plus / SE (2016) : CHF 99 | iPhone X : CHF 129
+  ### SAMSUNG — Écrans
+  Galaxy S26 Ultra : 349 | S26 Plus : 329 | S26 : 299
+  Galaxy S25 Ultra : 349 | S25 Plus : 329 | S25 : 279
+  Galaxy S24 Ultra : 349 | S24 Plus : 299 | S24 : 249
+  Galaxy S23 Ultra : 329 | S23 Plus : 279 | S23 : 249
+  Galaxy S22 Ultra : 329 | S22 Plus : 279 | S22 : 249
+  Galaxy S21 Ultra : 299 | S21 Plus : 249 | S21 : 229
+  Galaxy S25 Edge : 349 | S25 FE : 249 | S24 FE : 229 | S23 FE : 199 | S21 FE : 199
+  Galaxy Z Fold 7 5G : 649 | Z Fold 6 5G : 579 | Z Fold 5 5G : 549
+  Galaxy Z Flip 7 FE : 379 | Z Flip 7 5G : 449 | Z Flip 6 5G : 399 | Z Flip 5 5G : 379
+  Galaxy A56 / A57 : 159 | A54 / A55 : 149 | A52 / A52s : 149 | A36 / A37 : 149
+  Galaxy A34 / A35 : 129 | A32 / A33 : 129 | A25 / A26 : 129 | A22 / A29 : 119 | A16 / A17 : 119 | A14 / A15 : 109
 
-  iPad — Écrans
-  iPad 3 : CHF 149 | iPad 4 : CHF 169
+  ### SAMSUNG — Batteries
+  À partir de CHF 39 (selon modèle).
 
-  iPod — Écrans
-  iPod Touch 1 / 2 : CHF 79 | iPod Touch 3 / 4 : CHF 89 | iPod Touch 5 / 6 : CHF 129
-
-  Prestations spéciales
-  Diagnostic : CHF 149 — déductible si réparation acceptée, non remboursable en cas de refus.
+  ### Autres prestations
+  Diagnostic : gratuit et sans engagement.
+  Réparation express en 30 min selon disponibilité de la pièce.
   Récupération de données : CHF 249 forfait — paiement préalable obligatoire, non remboursable.
   Certificat / Attestation assurance : CHF 100 forfait — paiement préalable obligatoire, non remboursable.
-  Garantie : 12 mois pièces et main d'œuvre. Annulée en cas de chute, oxydation, intervention externe ou mauvaise utilisation.
+  Données préservées pendant la réparation. Garantie 1 an (pièces et main d'œuvre) sur toutes nos réparations ; annulée en cas de chute, oxydation, intervention externe ou mauvaise utilisation. Face ID / True Tone / étanchéité selon intervention.
+
+  Pour tout modèle non listé (autre marque, MacBook / PC, console, tablette, accessoire, rachat) : ne donne pas de prix au hasard — collecte appareil + panne + prénom + numéro et indique qu'un technicien rappelle avec un devis.
 
   ---
 
